@@ -1,13 +1,29 @@
 package com.makarov.rickandmorty;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class CharacterModel {
+
+    @SerializedName("name")
+    @Expose
     private String name;
-    private String type;
+
+    @SerializedName("species")
+    @Expose
+    private String species;
+
+    @SerializedName("avatar")
+    @Expose
     private int avatar;
 
-    public CharacterModel(String name, String type, int avatar){
+    @SerializedName("id")
+    @Expose
+    private long id;
+
+    public CharacterModel(String name, String species, int avatar){
         this.name = name;
-        this.type = type;
+        this.species = species;
         this.avatar = avatar;
     }
 
@@ -19,12 +35,12 @@ public class CharacterModel {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getSpecies() {
+        return species;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public int getAvatar() {
@@ -33,5 +49,12 @@ public class CharacterModel {
 
     public void setAvatar(int avatar) {
         this.avatar = avatar;
+    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

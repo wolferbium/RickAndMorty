@@ -6,8 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,12 +29,34 @@ public class MainActivity extends AppCompatActivity {
         characterAdapter = new CharacterAdapter();
         charactersRecycleView.setAdapter(characterAdapter);
 
-        loadCharacters();
+        //loadCharacters();
+        getRequestCharacters();
+
     }
 
     private void loadCharacters(){
         Collection<CharacterModel> characters = getCharacters();
         characterAdapter.setCharacterList(characters);
+    }
+
+    private void getRequestCharacters() {
+
+        NetworkService.getInstance()
+                .getJSONApi()
+                .getCharacterWithID(1)
+                .enqueue(new Callback<CharacterModel>() {
+                    @Override
+                    public void onResponse(Call<CharacterModel> call, Response<CharacterModel> response){
+                        CharacterModel character = response.body();
+
+                        characterAdapter.addCharacter(character);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CharacterModel> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
     }
 
     private Collection<CharacterModel> getCharacters(){

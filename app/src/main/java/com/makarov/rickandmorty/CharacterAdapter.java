@@ -21,6 +21,11 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         notifyDataSetChanged();
     }
 
+    public void addCharacter(CharacterModel character){
+        characterList.add(character);
+        notifyDataSetChanged();
+    }
+
     public void clearCharacterList(){
         characterList.clear();
         notifyDataSetChanged();
@@ -46,19 +51,19 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
     class CharacterViewHolder extends RecyclerView.ViewHolder {
         private ImageView avatar;
         private TextView name;
-        private TextView type;
+        private TextView species;
 
         public CharacterViewHolder(View characterView) {
             super(characterView);
             //avatar = characterView.findViewById(R.id.character_avatar);
             name = characterView.findViewById(R.id.character_name);
-            type = characterView.findViewById(R.id.character_type);
+            species = characterView.findViewById(R.id.character_species);
 
         }
 
         public void bind(CharacterModel character){
             name.setText(character.getName());
-            type.setText(character.getType());
+            species.setText(character.getSpecies());
         }
     }
 }
