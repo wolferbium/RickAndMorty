@@ -11,10 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView charactersRecycleView;
@@ -30,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         charactersRecycleView.setAdapter(characterAdapter);
 
         //loadCharacters();
-        getRequestCharacters();
+        //characterAdapter.getRequestCharacter();
+        characterAdapter.getRequestCharactersPage(1);
 
     }
 
@@ -39,31 +36,11 @@ public class MainActivity extends AppCompatActivity {
         characterAdapter.setCharacterList(characters);
     }
 
-    private void getRequestCharacters() {
-
-        NetworkService.getInstance()
-                .getJSONApi()
-                .getCharacterWithID(1)
-                .enqueue(new Callback<CharacterModel>() {
-                    @Override
-                    public void onResponse(Call<CharacterModel> call, Response<CharacterModel> response){
-                        CharacterModel character = response.body();
-
-                        characterAdapter.addCharacter(character);
-                    }
-
-                    @Override
-                    public void onFailure(Call<CharacterModel> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-    }
-
     private Collection<CharacterModel> getCharacters(){
         return Arrays.asList(
-                new CharacterModel("Char1","human",123),
-                new CharacterModel("Char1","human",123),
-                new CharacterModel("Char1","human",123),
-                new CharacterModel("Char2", "nothuman", 456));
+                new CharacterModel("Char1","human","123",1),
+                new CharacterModel("Char1","human","123",2),
+                new CharacterModel("Char1","human","123",3),
+                new CharacterModel("Char2", "nothuman", "456",4));
     }
 }

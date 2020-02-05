@@ -2,15 +2,24 @@ package com.makarov.rickandmorty;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.pdf.PdfDocument;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder> {
 
@@ -31,6 +40,47 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         notifyDataSetChanged();
     }
 
+    public void getRequestCharacter() {
+
+        NetworkService.getInstance()
+                .getJSONApi()
+                .getCharacterWithID(1)
+                .enqueue(new Callback<CharacterModel>() {
+                    @Override
+                    public void onResponse(Call<CharacterModel> call, Response<CharacterModel> response){
+                        CharacterModel character = response.body();
+
+                        addCharacter(character);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CharacterModel> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
+    public void getRequestCharactersPage(int page) {
+        Log.w("RequestCharactersPage", "Start");
+        NetworkService.getInstance()
+                .getJSONApi()
+                .getCharactersPage(page)
+                .enqueue(new Callback<PageModel>() {
+                    @Override
+                    public void onResponse(Call<PageModel> call, Response<PageModel> response) {
+                        PageModel page = response.body();
+
+                        setCharacterList(page.getResults());
+                        Log.w("RequestCharactersPage", "Items: " + getItemCount());
+                    }
+
+                    @Override
+                    public void onFailure(Call<PageModel> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_character, parent, false);
@@ -49,13 +99,13 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
     }
 
     class CharacterViewHolder extends RecyclerView.ViewHolder {
-        private ImageView avatar;
+        private ImageView image;
         private TextView name;
         private TextView species;
 
         public CharacterViewHolder(View characterView) {
             super(characterView);
-            //avatar = characterView.findViewById(R.id.character_avatar);
+            image = characterView.findViewById(R.id.character_image);
             name = characterView.findViewById(R.id.character_name);
             species = characterView.findViewById(R.id.character_species);
 
@@ -64,6 +114,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         public void bind(CharacterModel character){
             name.setText(character.getName());
             species.setText(character.getSpecies());
+            Glide.with(image).load(character.getImage()).into(image);
         }
     }
 }

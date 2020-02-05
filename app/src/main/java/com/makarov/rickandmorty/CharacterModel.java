@@ -13,18 +13,19 @@ public class CharacterModel {
     @Expose
     private String species;
 
-    @SerializedName("avatar")
+    @SerializedName("image")
     @Expose
-    private int avatar;
+    private String image;
 
     @SerializedName("id")
     @Expose
     private long id;
 
-    public CharacterModel(String name, String species, int avatar){
+    public CharacterModel(String name, String species, String image, long id){
         this.name = name;
         this.species = species;
-        this.avatar = avatar;
+        //this.image = image;
+        this.id = id;
     }
 
     public String getName() {
@@ -43,12 +44,12 @@ public class CharacterModel {
         this.species = species;
     }
 
-    public int getAvatar() {
-        return avatar;
+    public String getImage() {
+        return image;
     }
 
-    public void setAvatar(int avatar) {
-        this.avatar = avatar;
+    public void setImage(String image) {
+        this.image = image;
     }
     public long getId() {
         return id;
