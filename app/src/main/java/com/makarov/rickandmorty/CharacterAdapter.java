@@ -21,7 +21,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder> {
+public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_NORMAL = 1;
+    private boolean isLoaderVisible = false;
 
     private List<CharacterModel> characterList = new ArrayList<>();
 
@@ -81,16 +84,26 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
                 });
     }
 
+    @NonNull
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_character, parent, false);
-        return new CharacterViewHolder(view);
+        return new CharacterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_character, parent, false));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isLoaderVisible) {
+            return position == characterList.size() - 1 ? VIEW_TYPE_LOADING : VIEW_TYPE_NORMAL;
+        } else {
+            return VIEW_TYPE_NORMAL;
+        }
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull CharacterViewHolder holder, int position) {
-        holder.bind(characterList.get(position));
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        //holder.bind(characterList.get(position));
+        holder.onBind(position);
     }
 
     @Override
@@ -98,23 +111,43 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.Char
         return characterList.size();
     }
 
-    class CharacterViewHolder extends RecyclerView.ViewHolder {
+    public void addLoading() {
+        isLoaderVisible = true;
+        getRequestCharactersPage(2);
+    }
+
+    public void removeLoading() {
+        isLoaderVisible = false;
+    }
+
+    class CharacterViewHolder extends BaseViewHolder {
         private ImageView image;
         private TextView name;
         private TextView species;
+
+        private long position;
 
         public CharacterViewHolder(View characterView) {
             super(characterView);
             image = characterView.findViewById(R.id.character_image);
             name = characterView.findViewById(R.id.character_name);
             species = characterView.findViewById(R.id.character_species);
-
         }
 
-        public void bind(CharacterModel character){
+        //public void bind(CharacterModel character){
+        public void onBind(int position) {
+            this.position = position;
+            CharacterModel character = characterList.get(position);
             name.setText(character.getName());
             species.setText(character.getSpecies());
             Glide.with(image).load(character.getImage()).into(image);
+        }
+    }
+
+    class ProgressHolder extends BaseViewHolder {
+
+        public ProgressHolder(View progressView) {
+            super(progressView);
         }
     }
 }

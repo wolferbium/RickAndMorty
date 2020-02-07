@@ -3,8 +3,10 @@ package com.makarov.rickandmorty;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -14,33 +16,48 @@ import java.util.Collection;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView charactersRecycleView;
+    private SwipeRefreshLayout swipeRefresh;
     private CharacterAdapter characterAdapter;
+
+    private boolean isLastPage = false;
+    private int currentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //swipeRefresh.findViewById(R.id.swipeRefresh);
+        //swipeRefresh.setOnRefreshListener(this);
+
         charactersRecycleView = findViewById(R.id.list_characters);
-        charactersRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        charactersRecycleView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        charactersRecycleView.setLayoutManager(layoutManager);
         characterAdapter = new CharacterAdapter();
         charactersRecycleView.setAdapter(characterAdapter);
 
         //loadCharacters();
         //characterAdapter.getRequestCharacter();
-        characterAdapter.getRequestCharactersPage(1);
+        characterAdapter.getRequestCharactersPage(currentPage);
 
-    }
+        charactersRecycleView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                currentPage++;
+                characterAdapter.getRequestCharactersPage(currentPage);
+            }
 
-    private void loadCharacters(){
-        Collection<CharacterModel> characters = getCharacters();
-        characterAdapter.setCharacterList(characters);
-    }
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
 
-    private Collection<CharacterModel> getCharacters(){
-        return Arrays.asList(
-                new CharacterModel("Char1","human","123",1),
-                new CharacterModel("Char1","human","123",2),
-                new CharacterModel("Char1","human","123",3),
-                new CharacterModel("Char2", "nothuman", "456",4));
+            @Override
+            public boolean isLoading() {
+                return false;
+            }
+        });
+
     }
 }
