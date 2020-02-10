@@ -1,6 +1,7 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.network;
 
-import java.util.List;
+import com.makarov.rickandmorty.model.CharacterModel;
+import com.makarov.rickandmorty.model.PageModel;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

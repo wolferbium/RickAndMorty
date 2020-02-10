@@ -1,17 +1,16 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import com.makarov.rickandmorty.R;
+import com.makarov.rickandmorty.ui.CharacterAdapter;
+import com.makarov.rickandmorty.ui.PaginationScrollListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,13 +21,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLastPage = false;
     private int currentPage = 1;
 
+    public static final String EXTRA_CHARACTER_ID = "com.makarov.rickandmorty.CHARACTER_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //swipeRefresh.findViewById(R.id.swipeRefresh);
-        //swipeRefresh.setOnRefreshListener(this);
 
         charactersRecycleView = findViewById(R.id.list_characters);
         charactersRecycleView.setHasFixedSize(true);
@@ -37,10 +35,9 @@ public class MainActivity extends AppCompatActivity {
         characterAdapter = new CharacterAdapter();
         charactersRecycleView.setAdapter(characterAdapter);
 
-        //loadCharacters();
-        //characterAdapter.getRequestCharacter();
-        characterAdapter.getRequestCharactersPage(currentPage);
-
+        if (CharacterAdapter.isEmpty()) {
+            characterAdapter.getRequestCharactersPage(currentPage);
+        }
         charactersRecycleView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -59,5 +56,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        characterAdapter.registerOnCharacterClickCallback(this::onCharacterClick);
+    }
+
+    public void onCharacterClick(int characterPosition) {
+        Intent intent = new Intent(this, CharacterInfo.class);
+        intent.putExtra(EXTRA_CHARACTER_ID, characterPosition);
+        startActivity(intent);
     }
 }

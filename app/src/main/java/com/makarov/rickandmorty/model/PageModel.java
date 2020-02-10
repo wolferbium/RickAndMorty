@@ -1,7 +1,9 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.makarov.rickandmorty.model.CharacterModel;
+import com.makarov.rickandmorty.model.InfoModel;
 
 import java.util.ArrayList;
 

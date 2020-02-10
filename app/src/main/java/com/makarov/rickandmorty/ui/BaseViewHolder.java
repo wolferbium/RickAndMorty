@@ -1,4 +1,4 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.ui;
 
 import android.view.View;
 

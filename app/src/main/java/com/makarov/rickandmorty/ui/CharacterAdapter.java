@@ -1,9 +1,9 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.ui;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.pdf.PdfDocument;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.makarov.rickandmorty.network.NetworkService;
+import com.makarov.rickandmorty.R;
+import com.makarov.rickandmorty.model.CharacterModel;
+import com.makarov.rickandmorty.model.PageModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +29,15 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final int VIEW_TYPE_LOADING = 0;
     private static final int VIEW_TYPE_NORMAL = 1;
     private boolean isLoaderVisible = false;
+    public OnCharacterClick onCharacterClick;
 
-    private List<CharacterModel> characterList = new ArrayList<>();
+    private static List<CharacterModel> characterList = new ArrayList<>();
+
+    //private View.OnClickListener onCharacterClickListener;
+
+    public void registerOnCharacterClickCallback(OnCharacterClick onCharacterClick) {
+        this.onCharacterClick = onCharacterClick;
+    }
 
     public void setCharacterList(Collection<CharacterModel> characters){
         characterList.addAll(characters);
@@ -36,31 +47,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public void addCharacter(CharacterModel character){
         characterList.add(character);
         notifyDataSetChanged();
-    }
-
-    public void clearCharacterList(){
-        characterList.clear();
-        notifyDataSetChanged();
-    }
-
-    public void getRequestCharacter() {
-
-        NetworkService.getInstance()
-                .getJSONApi()
-                .getCharacterWithID(1)
-                .enqueue(new Callback<CharacterModel>() {
-                    @Override
-                    public void onResponse(Call<CharacterModel> call, Response<CharacterModel> response){
-                        CharacterModel character = response.body();
-
-                        addCharacter(character);
-                    }
-
-                    @Override
-                    public void onFailure(Call<CharacterModel> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
     }
 
     public void getRequestCharactersPage(int page) {
@@ -102,7 +88,6 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        //holder.bind(characterList.get(position));
         holder.onBind(position);
     }
 
@@ -111,19 +96,20 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return characterList.size();
     }
 
-    public void addLoading() {
-        isLoaderVisible = true;
-        getRequestCharactersPage(2);
+    public static CharacterModel getCharacter(int index) {
+        return characterList.get(index);
     }
 
-    public void removeLoading() {
-        isLoaderVisible = false;
+    public static boolean isEmpty() {
+        return characterList.isEmpty();
     }
 
     class CharacterViewHolder extends BaseViewHolder {
         private ImageView image;
         private TextView name;
         private TextView species;
+
+        private ConstraintLayout constraintLayout;
 
         private long position;
 
@@ -132,6 +118,10 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             image = characterView.findViewById(R.id.character_image);
             name = characterView.findViewById(R.id.character_name);
             species = characterView.findViewById(R.id.character_species);
+            constraintLayout = characterView.findViewById(R.id.item_character);
+
+            //characterView.setTag(this);
+            //characterView.setOnClickListener(onCharacterClickListener);
         }
 
         //public void bind(CharacterModel character){
@@ -141,13 +131,16 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             name.setText(character.getName());
             species.setText(character.getSpecies());
             Glide.with(image).load(character.getImage()).into(image);
+
+            constraintLayout.setOnClickListener( view -> {
+                if (getAdapterPosition() != -1) {
+                    onCharacterClick.onCharacterClick(getAdapterPosition());
+                }
+            });
         }
     }
 
-    class ProgressHolder extends BaseViewHolder {
-
-        public ProgressHolder(View progressView) {
-            super(progressView);
-        }
+    public interface OnCharacterClick {
+        void onCharacterClick(int characterPosition);
     }
 }

@@ -1,4 +1,4 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.network;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

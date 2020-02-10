@@ -1,4 +1,4 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -19,9 +19,17 @@ public class CharacterModel {
 
     @SerializedName("id")
     @Expose
-    private long id;
+    private int id;
 
-    public CharacterModel(String name, String species, String image, long id){
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    @SerializedName("url")
+    @Expose
+    private String url;
+
+    public CharacterModel(String name, String species, String image, int id){
         this.name = name;
         this.species = species;
         //this.image = image;
@@ -51,11 +59,27 @@ public class CharacterModel {
     public void setImage(String image) {
         this.image = image;
     }
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -1,4 +1,4 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.ui;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;

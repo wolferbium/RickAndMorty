@@ -1,4 +1,4 @@
-package com.makarov.rickandmorty;
+package com.makarov.rickandmorty.model;
 
 public class InfoModel {
     private int count;

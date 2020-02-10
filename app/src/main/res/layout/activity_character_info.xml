@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".app.CharacterInfo">
+
+    <ImageView
+        android:id="@+id/character_info_character_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/character_info_character_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="20sp"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_info_character_image"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/character_info_character_species"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/character_info_character_name"
+        app:layout_constraintTop_toBottomOf="@id/character_info_character_name"
+        tools:text="Species"/>
+
+    <TextView
+        android:id="@+id/character_info_character_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/character_info_character_species"
+        app:layout_constraintTop_toBottomOf="@id/character_info_character_species"
+        tools:text="Status"/>
+    <TextView
+        android:id="@+id/character_info_character_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:autoLink="web"
+        app:layout_constraintStart_toStartOf="@id/character_info_character_status"
+        app:layout_constraintTop_toBottomOf="@id/character_info_character_status"
+        tools:text="http://www"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
