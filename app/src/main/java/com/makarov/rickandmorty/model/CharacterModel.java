@@ -3,7 +3,9 @@ package com.makarov.rickandmorty.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CharacterModel {
+import java.io.Serializable;
+
+public class CharacterModel implements Serializable {
 
     @SerializedName("name")
     @Expose
