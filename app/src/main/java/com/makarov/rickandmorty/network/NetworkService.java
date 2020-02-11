@@ -34,7 +34,26 @@ public class NetworkService {
                 .build();
     }
 
-    public static void getRequestCharactersPage(int page, loadCharactersCallback callback) {
+    public static void getCharacterById(int characterId, loadCharacterCallback callback) {
+        Log.w("RequestCharactersPage", "Start");
+        getInstance()
+                .getJSONApi()
+                .getCharacterByID(characterId)
+                .enqueue(new Callback<CharacterModel>() {
+                    @Override
+                    public void onResponse(Call<CharacterModel> call, Response<CharacterModel> response) {
+                        CharacterModel character = response.body();
+                        callback.onLoad(character);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CharacterModel> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
+    public static void getCharactersPage(int page, loadPageCallback callback) {
         Log.w("RequestCharactersPage", "Start");
         getInstance()
                 .getJSONApi()
@@ -53,8 +72,12 @@ public class NetworkService {
                 });
     }
 
-    public interface loadCharactersCallback {
+    public interface loadPageCallback {
         void onLoad(Collection<CharacterModel> characters);
+    }
+
+    public interface loadCharacterCallback {
+        void onLoad(CharacterModel character);
     }
 
     public static NetworkService getInstance() {

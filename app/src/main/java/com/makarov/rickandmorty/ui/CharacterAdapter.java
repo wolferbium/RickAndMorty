@@ -84,13 +84,13 @@ public class CharacterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
             constraintLayout.setOnClickListener( view -> {
                 if (getAdapterPosition() != -1) {
-                    onCharacterClick.onCharacterClick(characters.get(getAdapterPosition()));
+                    onCharacterClick.onCharacterClick(characters.get(getAdapterPosition()).getId());
                 }
             });
         }
     }
 
     public interface OnCharacterClick {
-        void onCharacterClick(CharacterModel character);
+        void onCharacterClick(int characterId);
     }
 }

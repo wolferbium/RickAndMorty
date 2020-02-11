@@ -1,24 +1,32 @@
 package com.makarov.rickandmorty.presenter;
 
 import com.makarov.rickandmorty.app.MainActivity;
+import com.makarov.rickandmorty.app.MainView;
 import com.makarov.rickandmorty.model.CharacterModel;
 import com.makarov.rickandmorty.model.CharactersList;
 
 import java.util.Collection;
 
-public class CharacterListPresenter {
-    private MainActivity mainActivity;
-    private final CharactersList model;
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
+
+@InjectViewState
+public class CharacterListPresenter extends MvpPresenter<MainView> {
+    private CharactersList model;
 
     private int currentPage = 0;
 
-    public CharacterListPresenter(CharactersList model) {
-        this.model = model;
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+
+        this.model = new CharactersList();
         model.setPresenter(this);
+        updateCharacterList();
     }
 
-    public void attachView(MainActivity activity) {
-        mainActivity = activity;
+    public CharacterListPresenter() {
+
     }
 
     public void updateCharacterList() {
@@ -26,7 +34,7 @@ public class CharacterListPresenter {
         model.loadCharacters(currentPage, new CharactersList.afterLoadCharactersCallback() {
             @Override
             public void afterLoad(Collection<CharacterModel> characters){
-                mainActivity.update(characters);
+                getViewState().update(characters);
             }
         });
     }

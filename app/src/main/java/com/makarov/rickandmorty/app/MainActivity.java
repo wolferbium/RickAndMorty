@@ -1,11 +1,12 @@
 package com.makarov.rickandmorty.app;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.makarov.rickandmorty.R;
 import com.makarov.rickandmorty.model.CharacterModel;
@@ -16,29 +17,27 @@ import com.makarov.rickandmorty.ui.PaginationScrollListener;
 
 import java.util.Collection;
 
-public class MainActivity extends AppCompatActivity {
+import moxy.MvpAppCompatActivity;
+import moxy.presenter.InjectPresenter;
+import moxy.viewstate.strategy.alias.Skip;
+
+public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private RecyclerView charactersRecycleView;
     private CharacterAdapter characterAdapter;
 
-    private CharacterListPresenter presenter;
-    public static final String EXTRA_CHARACTER= "com.makarov.rickandmorty.CHARACTER";
+    @InjectPresenter
+    CharacterListPresenter presenter;
+
+    public static final String EXTRA_CHARACTER_ID = "com.makarov.rickandmorty.CHARACTER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initPresenter();
         initCharacterAdapter();
         initRecycleView();
-
-        presenter.updateCharacterList();
-    }
-
-    private void initPresenter() {
-        presenter = new CharacterListPresenter(new CharactersList());
-        presenter.attachView(this);
     }
 
     private void initCharacterAdapter() {
@@ -71,12 +70,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void onCharacterClick(CharacterModel character) {
-        Intent intent = new Intent(this, CharacterView.class);
-        intent.putExtra(EXTRA_CHARACTER, character);
+    @Override
+    public void onCharacterClick(int characterId) {
+        Intent intent = new Intent(this, CharacterActivity.class);
+        intent.putExtra(EXTRA_CHARACTER_ID, characterId);
         startActivity(intent);
     }
 
+    @Override
     public void update(Collection<CharacterModel> characters) {
         characterAdapter.setData(characters);
     }

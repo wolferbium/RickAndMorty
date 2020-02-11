@@ -1,39 +1,36 @@
 package com.makarov.rickandmorty.presenter;
 
+import com.makarov.rickandmorty.app.CharacterActivity;
 import com.makarov.rickandmorty.app.CharacterView;
-import com.makarov.rickandmorty.app.MainActivity;
 import com.makarov.rickandmorty.model.CharacterModel;
+import com.makarov.rickandmorty.model.CharactersList;
+import com.makarov.rickandmorty.network.NetworkService;
 
-public class CharacterPresenter {
-    private CharacterView view;
-    private final CharacterModel model;
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
+import moxy.ViewStateProvider;
 
-    public CharacterPresenter(CharacterModel model) {
-        this.model = model;
+@InjectViewState
+public class CharacterPresenter extends MvpPresenter<CharacterView> {
+
+    public CharacterPresenter() {
     }
 
-    public void attachView(CharacterView view) {
-        this.view = view;
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
     }
 
-    public String getImage() {
-        return model.getImage();
+    public void setId(int characterId) {
+        NetworkService.getCharacterById(characterId, new NetworkService.loadCharacterCallback() {
+            @Override
+            public void onLoad(CharacterModel character) {
+                getViewState().setName(character.getName());
+                getViewState().setImage(character.getImage());
+                getViewState().setSpecies(character.getSpecies());
+                getViewState().setStatus(character.getSpecies());
+                getViewState().setUrl(character.getUrl());
+            }
+        });
     }
-
-    public String getName() {
-        return model.getName();
-    }
-
-    public String getSpecies() {
-        return model.getSpecies();
-    }
-
-    public String getStatus() {
-        return model.getStatus();
-    }
-
-    public String getUrl() {
-        return model.getUrl();
-    }
-
 }

@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".app.CharacterView" android:parentActivityName=".app.MainActivity">
+        <activity android:name=".app.CharacterActivity" android:parentActivityName=".app.MainActivity">
         </activity>
         <activity android:name=".app.MainActivity">
             <intent-filter>

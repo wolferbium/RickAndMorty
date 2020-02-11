@@ -20,7 +20,7 @@ public class CharactersList {
 
 
     public void loadCharacters(int page, afterLoadCharactersCallback callback) {
-        NetworkService.getRequestCharactersPage(page, new NetworkService.loadCharactersCallback() {
+        NetworkService.getCharactersPage(page, new NetworkService.loadPageCallback() {
             @Override
             public void onLoad(Collection<CharacterModel> characterList) {
                 addCharacters(characterList);

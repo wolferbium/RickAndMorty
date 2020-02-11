@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.CharacterView">
+    android:isScrollContainer="true"
+    tools:context=".app.CharacterActivity">
 
     <ImageView
         android:id="@+id/character_info_character_image"
